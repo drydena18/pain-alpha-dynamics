@@ -6,13 +6,13 @@ P.PROJ_ROOT = fullfile('/cifs','seminowicz','eegPainDatasets','CNED'); % Root fo
 
 % ---- BIDS dataset root ----
 P.PROC = fullfile(P.PROJ_ROOT, 'da-analysis'); % preproc data goes here
-P.RUN = fullfile(P.PROC, '26ByBiosemi'); % where my preproc lives
-P.RESOURCE = fullile(P.RUN, 'resources'); % analysis resources
+P.PROC = fullfile(P.BIDS, '26ByBiosemi'); % 
+P.RESOURCE = fullile(P.BIDS, 'resources');
 
 % ---- Core Inputs ----
-P.PARTICIPANTS_TSV = fullfile(P.RESOURCE, 'participants.tsv');
-P.DATASET_EVENTS_JSON = fullfile(P.PROJ_ROOT, '26ByBiosemi', 'task-26ByBiosemi_events.json');
-P.CSV_SINGLETRIAL = fullfile(P.RESOURCE, 'participants_singletrial_26ByBiosemi.csv'); 
+P.PARTICIPANTS_TSV = fullfile(P.BIDS, 'participants.tsv');
+P.DATASET_EVENTS_JSON = fullfile(P.BIDS, 'task-26ByBiosemi_events.json');
+P.CSV_SINGLETRIAL = fullfile(P.PROJ_ROOT, 'data', 'CSV', 'participants_singletrial_26ByBiosemi.csv'); %% Need to downlaod
 
 % ---- Derivatives ----
 P.DERIV = fullfile(P.PROJ_ROOT,'da-analysis','26ByBiosemi','derivatives');

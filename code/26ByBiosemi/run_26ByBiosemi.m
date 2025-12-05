@@ -90,8 +90,8 @@ EEG = save_eeg_set(EEG, save_path1, [sub(subi,:) '_26ByBiosemi.set'], [strtrim(s
 % ---- resample & filters ----
 EEG = pop_resample( EEG, 1000);
 EEG = pop_eegfiltnew(EEG, 'locutoff', 1); 
-EEG = pop_eegfiltnew(EEG, 'hicutoff', 100); 
-EEG = pop_eegfiltnew(EEG, 'locutoff', 48, 'hicutoff', 52, 'revfilt', 1); % notch filter
+EEG = pop_eegfiltnew(EEG, 'hicutoff', 45); 
+%EEG = pop_eegfiltnew(EEG, 'locutoff', 48, 'hicutoff', 52, 'revfilt', 1); % notch filter
 
 % ---- epoch and baseline ----
 EEG = pop_epoch( EEG, event_marker, [-1, 2], 'newname', 'Merged datsets epochs', 'epochinfo', 'yes'); %epoching
@@ -224,6 +224,15 @@ if doICA
 
     % ---- Save ICA dataset to ica/ ----
     save_eeg_set(EEG, [P.ICA filesep], [sub(subi,:) '_26ByBiosemi.set'], [strtrim(sub(subi,:)) '_ica']);
+
+    evalin('base', 'eeglab');
+    assignid('base','EEG', EEG);
+    evalin('base','[ALLEEG EEG index] = eeg_store(ALLEEG,EEG,0);');
+
+    pop_topoplot(EEG, 0, [1:20], EEG.filename, [3 4], 0, 'electrodes' ,'on');
+    compDel = input('Delete Components: ', 's');
+    compDel = str2num(compDel);
+    EEG = pop_subcomp(EEG, [compDel], 0);
 end
 
 %% ================================================
@@ -251,8 +260,7 @@ if doPost
             % Add back any missing channels found in orig_chanlocs
             EEG = pop_interp(EEG, S.orig_chanlocs, 'spherical');
         else
-            % Fallback: If only labels present, try to match against known
-            % cap
+            % Fallback: If only labels present, try to match against known cap
             warning('orig_chanlocs not found; unable to auto-restore montage for interpolation');
         end
     end
